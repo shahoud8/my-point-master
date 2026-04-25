@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root { --bg: #0f172a; --accent: #38bdf8; }
+        body { background: var(--bg); color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        .card { background: #1e293b; padding: 20px; border-radius: 20px; border: 1px solid var(--accent); }
+        button { background: var(--accent); color: black; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 id="user-name">تحميل...</h1>
+        <p>رصيدك: <span id="points" style="color:var(--accent)">0</span> نقطة</p>
+        <button onclick="addPoints()">إكمال مهمة HR (+10)</button>
+    </div>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        document.getElementById("user-name").innerText = `المهندس ${tg.initDataUnsafe.user.first_name}`;
+        let pts = 0;
+        function addPoints() { pts += 10; document.getElementById("points").innerText = pts; tg.HapticFeedback.impactOccurred('medium'); }
+    </script>
+</body>
+</html>
