@@ -29,39 +29,6 @@
         <div class="task-item">
             <div><strong>دعوة خبير صيدلاني</strong><br><small>+500 نقطة</small></div>
             <button class="btn-claim" onclick="claim(500)">دعوة</button>
-
-cat << 'EOF' > index.html
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root { --primary: #38bdf8; --bg: #0f172a; --card: #1e293b; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .header { background: linear-gradient(135deg, var(--primary), #818cf8); padding: 25px; border-radius: 25px; width: 90%; box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4); text-align: center; margin-bottom: 30px; }
-        .score { font-size: 3rem; font-weight: 800; margin: 10px 0; }
-        .task-list { width: 100%; display: grid; gap: 15px; }
-        .task-item { background: var(--card); padding: 18px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; transition: 0.3s; }
-        .task-item:active { transform: scale(0.97); background: #334155; }
-        .btn-claim { background: var(--primary); color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <div style="font-size: 0.9rem; opacity: 0.9;">رصيد المهندس سمير</div>
-        <div class="score" id="pointsDisplay">0</div>
-        <div style="font-size: 0.8rem;">نقطة NEXUS</div>
-    </div>
-    <div class="task-list">
-        <div class="task-item">
-            <div><strong>تحليل CV بالذكاء الاصطناعي</strong><br><small>+100 نقطة</small></div>
-            <button class="btn-claim" onclick="claim(100)">تنفيذ</button>
-        </div>
-        <div class="task-item">
-            <div><strong>دعوة خبير صيدلاني</strong><br><small>+500 نقطة</small></div>
-            <button class="btn-claim" onclick="claim(500)">دعوة</button>
         </div>
     </div>
     <script>
