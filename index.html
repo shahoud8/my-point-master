@@ -5,43 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --primary: #38bdf8; --bg: #0f172a; --card: #1e293b; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .header { background: linear-gradient(135deg, var(--primary), #818cf8); padding: 25px; border-radius: 25px; width: 90%; box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4); text-align: center; margin-bottom: 30px; }
-        .score { font-size: 3rem; font-weight: 800; margin: 10px 0; }
-        .task-list { width: 100%; display: grid; gap: 15px; }
-        .task-item { background: var(--card); padding: 18px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; transition: 0.3s; }
-        .task-item:active { transform: scale(0.97); background: #334155; }
-        .btn-claim { background: var(--primary); color: #000; border: none; padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        :root { --primary: #38bdf8; --bg: #0f172a; --card: #1e293b; --accent: #f472b6; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 0; padding-bottom: 80px; }
+        .container { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header { background: linear-gradient(135deg, var(--primary), #6366f1); padding: 30px; border-radius: 0 0 30px 30px; width: 100%; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .score { font-size: 3.5rem; font-weight: 900; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .nav-tabs { position: fixed; bottom: 0; background: #1e293b; width: 100%; display: flex; border-top: 1px solid #334155; z-index: 100; }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: none; color: #94a3b8; font-weight: bold; cursor: pointer; }
+        .tab-btn.active { color: var(--primary); border-top: 3px solid var(--primary); }
+        .section { display: none; width: 100%; padding: 20px; box-sizing: border-box; }
+        .section.active { display: block; }
+        .card { background: var(--card); padding: 15px; border-radius: 18px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
+        .btn { background: var(--primary); color: #000; border: none; padding: 10px 18px; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .ref-box { background: #334155; padding: 15px; border-radius: 15px; width: 100%; text-align: center; margin-top: 10px; border: 1px dashed var(--primary); }
     </style>
 </head>
 <body>
     <div class="header">
-        <div style="font-size: 0.9rem; opacity: 0.9;">رصيد المهندس سمير</div>
+        <div style="opacity: 0.8;">إجمالي رصيد NEXUS</div>
         <div class="score" id="pointsDisplay">0</div>
-        <div style="font-size: 0.8rem;">نقطة NEXUS</div>
     </div>
-    <div class="task-list">
-        <div class="task-item">
-            <div><strong>تحليل CV بالذكاء الاصطناعي</strong><br><small>+100 نقطة</small></div>
-            <button class="btn-claim" onclick="claim(100)">تنفيذ</button>
+
+    <div id="tasks" class="section active">
+        <h3>⚡ المهام النشطة</h3>
+        <div class="card">
+            <div><strong>مهمة الإحالة</strong><br><small>+1000 نقطة لكل صديق</small></div>
+            <button class="btn" onclick="shareRef()">دعوة</button>
         </div>
-        <div class="task-item">
-            <div><strong>دعوة خبير صيدلاني</strong><br><small>+500 نقطة</small></div>
-            <button class="btn-claim" onclick="claim(500)">دعوة</button>
+        <div class="card">
+            <div><strong>التحقق من القناة</strong><br><small>+500 نقطة</small></div>
+            <button class="btn" onclick="claim(500)">تحقق</button>
         </div>
     </div>
+
+    <div id="referral" class="section">
+        <h3>👥 نظام الإحالة الفيروسي</h3>
+        <p>شارك الرابط مع أصدقائك واحصل على 1000 نقطة عن كل شخص ينضم عبرك.</p>
+        <div class="ref-box" id="refLink">t.me/Nexus1TaskBot?start=ref123</div>
+        <button class="btn" style="width:100%; margin-top:10px;" onclick="copyLink()">نسخ رابط الإحالة</button>
+    </div>
+
+    <div id="shop" class="section">
+        <h3>🛒 متجر المكافآت</h3>
+        <div class="card">
+            <div><strong>استشارة صيدلانية</strong><br><small>5000 نقطة</small></div>
+            <button class="btn" style="background:var(--accent)" onclick="buy(5000, 'استشارة')">شراء</button>
+        </div>
+        <div class="card">
+            <div><strong>قسيمة خصم 20%</strong><br><small>2000 نقطة</small></div>
+            <button class="btn" style="background:var(--accent)" onclick="buy(2000, 'قسيمة')">شراء</button>
+        </div>
+    </div>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="showTab('tasks', this)">المهام</button>
+        <button class="tab-btn" onclick="showTab('referral', this)">الإحالة</button>
+        <button class="tab-btn" onclick="showTab('shop', this)">المتجر</button>
+    </nav>
+
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
         let points = parseInt(localStorage.getItem('userPoints')) || 0;
+        let userId = tg.initDataUnsafe.user?.id || 'guest';
+        
+        document.getElementById('refLink').innerText = `t.me/Nexus1TaskBot/nexus?startapp=${userId}`;
         updateDisplay();
+
+        function showTab(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
         function claim(amount) {
             points += amount;
-            localStorage.setItem('userPoints', points);
-            updateDisplay();
+            save();
             tg.HapticFeedback.notificationOccurred('success');
         }
+
+        function buy(cost, item) {
+            if(points >= cost) {
+                points -= cost;
+                save();
+                tg.showAlert(`تم شراء ${item} بنجاح!`);
+            } else {
+                tg.showAlert('عذراً، رصيدك غير كافٍ');
+            }
+        }
+
+        function shareRef() {
+            const url = `t.me/Nexus1TaskBot/nexus?startapp=${userId}`;
+            const text = "انضم إلي في تطبيق Point Master واجمع نقاط NEXUS للربح!";
+            tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+        }
+
+        function save() {
+            localStorage.setItem('userPoints', points);
+            updateDisplay();
+        }
+
         function updateDisplay() {
             document.getElementById('pointsDisplay').innerText = points.toLocaleString();
         }
